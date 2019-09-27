@@ -34,36 +34,63 @@ class Hero:
 
     def attack(self):
         attack_strenth = 0
-        for ability in range(len(self.abilities)):
-            attack_strenth =+ self.abilities[ability].attack()
+        for ability in self.abilities:
+            attack_strenth = attack_strenth + ability.attack()
         return attack_strenth
 
     def defend(self):
         damage_amt = 0
-        for armor in range(len(self.armors)):
-            damage_amt =+ self.armors[armor].block()
+        for armor in self.armors:
+            damage_amt = damage_amt + armor.attack()
         return damage_amt
 
     def take_damage(self, damage):
-        attack = damage-self.defend()
-        if attack < 0:
-            attack = 0 # set attack back to 0 if it goes below 0
-        self.current_health = self.current_health-attack
+        attack = self.defend()
+        # print(type(attack))
+        # print(type(damage))
+
+        attack_val = 0
+        if damage - attack > 0:
+            attack_val = damage - attack
+        else:
+            attack_val = 0 # set attack back to 0 if it goes below 0
+        self.current_health = self.current_health - attack_val
+        # self.current_health -= damage - self.defend()
+        # return self.current_health
 
     def is_alive(self):
         if self.current_health <= 0:
             return False
-        return True
+        else:
+            return True
 
+    def fight(self, opponent):
+        while self.is_alive() and opponent.is_alive():
+            self.take_damage(opponent.attack())
+            opponent.take_damage(self.attack())
+            print(self.current_health)
+            print(opponent.current_health)
+
+        if len(self.abilities)>=0 and len(opponent.abilities)>=1:
+            print(self.name, 'won!')
+        elif len(opponent.abilities)>=0 and len(self.abilities)>=1:
+            print(opponent.name, 'won!')
+        else:
+            print('Draw!')
 
 
 
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block is executed.
-    hero = Hero("Grace Hopper", 200)
-    hero.take_damage(150)
-    print(hero.is_alive())
-    hero.take_damage(2000)
-    print(hero.current_health)
-    print(hero.is_alive())
+    hero1 = Hero("Wonder Woman")
+    hero2 = Hero("Dumbledore")
+    ability1 = Ability("Super Speed", 300)
+    ability2 = Ability("Super Eyes", 130)
+    ability3 = Ability("Wizard Wand", 80)
+    ability4 = Ability("Wizard Beard", 20)
+    hero1.add_ability(ability1)
+    hero1.add_ability(ability2)
+    hero2.add_ability(ability3)
+    hero2.add_ability(ability4)
+    hero1.fight(hero2)

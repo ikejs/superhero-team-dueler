@@ -54,13 +54,30 @@ class Team:
         for hero in self.heroes:
             print(hero.name)
 
+    def attack(self, other_team):
+        randomHero = random.randint(0, len(self.heroes)-1)
+        randomOpponent = random.randint(0, len(other_team.heroes)-1)
+        self.heroes[randomHero].fight(other_team.heroes[randomOpponent])
+
+    def revive_heroes(self, health=100):
+        for heroes in self.heroes:
+            hero.starting_health = health
+        pass
+
+
+    def stats(self):
+        for member in self.heroes:
+            print(f'{member.name}: {member.kills}/{member.deaths}')
+
 class Hero:
     def __init__(self, name, starting_health=100):
-        self.abilities = list()
-        self.armors = list()
+        self.abilities = []
+        self.armors = []
         self.name = name
         self.starting_health = starting_health
         self.current_health = starting_health
+        self.deaths = 0
+        self.kills = 0
 
     def add_ability(self, ability):
         self.abilities.append(ability)
@@ -82,9 +99,6 @@ class Hero:
 
     def take_damage(self, damage):
         attack = self.defend()
-        # print(type(attack))
-        # print(type(damage))
-
         attack_val = 0
         if damage - attack > 0:
             attack_val = damage - attack
@@ -105,11 +119,22 @@ class Hero:
             self.take_damage(opponent.attack())
             opponent.take_damage(self.attack())
         if len(self.abilities)>=0 and len(opponent.abilities)>=1:
+            self.add_kill(1)
+            opponent.add_deaths(1)
             print(self.name, 'won!')
         elif len(opponent.abilities)>=0 and len(self.abilities)>=1:
+            opponent.add_kill(1)
+            self.add_deaths(1)
             print(opponent.name, 'won!')
         else:
             print('Draw!')
+
+
+    def add_kill(self, num_kills):
+        self.kills += num_kills
+
+    def add_deaths(self, num_deaths):
+        self.deaths += num_deaths
 
 
 class Weapon(Ability):
@@ -120,8 +145,12 @@ class Weapon(Ability):
 if __name__ == "__main__":
     # If you run this file from the terminal
     # this block is executed.
+    team1 = Team("Team One")
+    team2 = Team("Team Two")
     hero1 = Hero("Wonder Woman")
     hero2 = Hero("Dumbledore")
+    team1.add_hero(hero1)
+    team2.add_hero(hero2)
     ability1 = Ability("Super Speed", 300)
     ability2 = Ability("Super Eyes", 130)
     ability3 = Ability("Wizard Wand", 80)
@@ -134,3 +163,5 @@ if __name__ == "__main__":
     my_dog = Dog("Sophie", 12)
     my_dog.sleep()
     my_dog.bark()
+    team1.stats()
+    team2.stats()

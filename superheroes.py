@@ -18,6 +18,42 @@ class Armor:
         return random.randint(0, self.max_block)
 
 
+class Animal:
+    def __init__(self, name, sleep_duration):
+        self.name = name
+        self.sleep_duration = sleep_duration
+
+    def sleep(self):
+        print(
+            "{} sleeps for {} hours".format(
+                self.name,
+                self.sleep_duration
+            )
+        )
+
+class Dog(Animal):
+    def bark(self):
+        print("Woof Woof!")
+
+class Team:
+    def __init__(self, name):
+        self.name = name
+        self.heroes = list()
+
+    def add_hero(self, hero):
+        self.heroes.append(hero)
+
+    def remove_hero(self, name):
+        for hero in self.heroes:
+            if hero.name == name:
+                self.heroes.remove(hero)
+                break
+        return 0
+
+    def view_all_heroes(self):
+        for hero in self.heroes:
+            print(hero.name)
+
 class Hero:
     def __init__(self, name, starting_health=100):
         self.abilities = list()
@@ -33,10 +69,10 @@ class Hero:
         self.armors.append(armor)
 
     def attack(self):
-        attack_strenth = 0
+        attack_strength = 0
         for ability in self.abilities:
-            attack_strenth = attack_strenth + ability.attack()
-        return attack_strenth
+            attack_strength = attack_strength + ability.attack()
+        return attack_strength
 
     def defend(self):
         damage_amt = 0
@@ -68,9 +104,6 @@ class Hero:
         while self.is_alive() and opponent.is_alive():
             self.take_damage(opponent.attack())
             opponent.take_damage(self.attack())
-            print(self.current_health)
-            print(opponent.current_health)
-
         if len(self.abilities)>=0 and len(opponent.abilities)>=1:
             print(self.name, 'won!')
         elif len(opponent.abilities)>=0 and len(self.abilities)>=1:
@@ -78,6 +111,10 @@ class Hero:
         else:
             print('Draw!')
 
+
+class Weapon(Ability):
+    def attack(self):
+        return random.randint(self.max_damage // 2, self.max_damage)
 
 
 if __name__ == "__main__":
@@ -94,3 +131,6 @@ if __name__ == "__main__":
     hero2.add_ability(ability3)
     hero2.add_ability(ability4)
     hero1.fight(hero2)
+    my_dog = Dog("Sophie", 12)
+    my_dog.sleep()
+    my_dog.bark()

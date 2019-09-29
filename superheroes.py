@@ -136,6 +136,62 @@ class Hero:
     def add_deaths(self, num_deaths):
         self.deaths += num_deaths
 
+    def add_weapon(self, weapon):
+        self.abilities.append(weapon)
+
+    def add_armor(self, armor):
+        self.armors.append(armor)
+
+class Arena:
+    def __init__(self):
+        team_one: list()
+        team_two: list()
+
+    def create_ability(self):
+        name = input("Enter an ability: ")
+        max_damage = input(f"Enter a max damage for {name}: ")
+        return Ability(ability_name, ability_max_damage)
+
+    def create_weapon(self):
+        name = input("Enter a weapon name: ")
+        max_damage = input(f"Enter a max damage for {name}: ")
+        return Weapon(name, max_damage)
+
+    def create_armor(self):
+        name = input("Enter an armor name: ")
+        max_damage = input(f"Enter a max damage for {name}: ")
+        return Armor(name, max_block)
+
+    def create_hero(self):
+        hero = Hero(input("Enter a hero name: "), input("Enter a max health for the new hero: "))
+        adding = True
+        while adding:
+            print('ADD ITEMS: ')
+            print('1 to add ability\n2 to add a weapon\n3 to add armor\nand 4 to finish\n')
+            selection = input()
+            if selection == "1":
+                hero.add_ability(self.create_ability())
+            elif selection == "2":
+                hero.add_weapon(self.create_weapon())
+            elif selection == "3":
+                hero.add_armor(self.create_armor())
+        return hero
+
+        def build_team_one(self):
+            team = Team(input("Enter a name for team 1: "))
+            heroes_count = int(input("How many heroes would you like for team 1?: "))
+            for index in range(heroes_count):
+                team.add_hero(self.create_hero())
+        self.team_one = team
+
+
+        def build_team_two(self):
+            team = Team(input("Enter a name for team 2: "))
+            heroes_count = int(input("How many heroes would you like for team 2?: "))
+            for index in range(heroes_count):
+                team.add_hero(self.create_hero())
+        self.team_two = team
+
 
 class Weapon(Ability):
     def attack(self):

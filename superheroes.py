@@ -55,12 +55,12 @@ class Team:
             print(hero.name)
 
     def attack(self, other_team):
-        randomHero = random.randint(0, len(self.heroes)-1)
-        randomOpponent = random.randint(0, len(other_team.heroes)-1)
-        self.heroes[randomHero].fight(other_team.heroes[randomOpponent])
+        randomHero = random.randint(0, len(self.heroes))
+        randomOpponent = random.randint(0, len(other_team.heroes))
+        self.heroes[randomHero-1].fight(other_team.heroes[randomOpponent-1])
 
     def revive_heroes(self, health=100):
-        for heroes in self.heroes:
+        for hero in self.heroes:
             hero.starting_health = health
         pass
 
@@ -94,7 +94,7 @@ class Hero:
     def defend(self):
         damage_amt = 0
         for armor in self.armors:
-            damage_amt = damage_amt + armor.attack()
+            damage_amt = damage_amt + armor.block()
         return damage_amt
 
     def take_damage(self, damage):
@@ -118,11 +118,11 @@ class Hero:
         while self.is_alive() and opponent.is_alive():
             self.take_damage(opponent.attack())
             opponent.take_damage(self.attack())
-        if len(self.abilities)>=0 and len(opponent.abilities)>=1:
+        if self.is_alive() and not opponent.is_alive():
             self.add_kill(1)
             opponent.add_deaths(1)
             print(self.name, 'won!')
-        elif len(opponent.abilities)>=0 and len(self.abilities)>=1:
+        elif opponent.is_alive() and not self.is_alive():
             opponent.add_kill(1)
             self.add_deaths(1)
             print(opponent.name, 'won!')

@@ -6,7 +6,7 @@ class Ability:
         self.max_damage = max_damage
 
     def attack(self):
-        return random.randint(0, self.max_damage)
+        return random.randint(0, int(self.max_damage))
 
 
 class Armor:
@@ -15,7 +15,7 @@ class Armor:
         self.max_block = max_block
 
     def block(self):
-        return random.randint(0, self.max_block)
+        return random.randint(0, int(self.max_block))
 
 
 class Animal:
@@ -109,7 +109,7 @@ class Hero:
         # return self.current_health
 
     def is_alive(self):
-        if self.current_health <= 0:
+        if int(self.current_health) <= 0:
             return False
         else:
             return True
@@ -150,7 +150,7 @@ class Arena:
     def create_ability(self):
         name = input("Enter an ability: ")
         max_damage = input(f"Enter a max damage for {name}: ")
-        return Ability(ability_name, ability_max_damage)
+        return Ability(name, max_damage)
 
     def create_weapon(self):
         name = input("Enter a weapon name: ")
@@ -159,11 +159,11 @@ class Arena:
 
     def create_armor(self):
         name = input("Enter an armor name: ")
-        max_damage = input(f"Enter a max damage for {name}: ")
+        max_block = input(f"Enter a max block for {name}: ")
         return Armor(name, max_block)
 
     def create_hero(self):
-        hero = Hero(input("Enter a hero name: "), input("Enter a max health for the new hero: "))
+        hero = Hero(input("Enter a hero name: "), input("Enter a max health for the hero: "))
         adding = True
         while adding:
             print('ADD ITEMS: ')
@@ -175,49 +175,75 @@ class Arena:
                 hero.add_weapon(self.create_weapon())
             elif selection == "3":
                 hero.add_armor(self.create_armor())
+            elif selection == "4":
+                adding = False
         return hero
 
-        def build_team_one(self):
-            team = Team(input("Enter a name for team 1: "))
-            heroes_count = int(input("How many heroes would you like for team 1?: "))
-            for index in range(heroes_count):
-                team.add_hero(self.create_hero())
+    def build_team_one(self):
+        team = Team(input("Enter a name for team 1: "))
+        heroes_count = int(input("How many heroes would you like for team 1?: "))
+        for index in range(heroes_count):
+            team.add_hero(self.create_hero())
         self.team_one = team
 
 
-        def build_team_two(self):
-            team = Team(input("Enter a name for team 2: "))
-            heroes_count = int(input("How many heroes would you like for team 2?: "))
-            for index in range(heroes_count):
-                team.add_hero(self.create_hero())
+    def build_team_two(self):
+        team = Team(input("Enter a name for team 2: "))
+        heroes_count = int(input("How many heroes would you like for team 2?: "))
+        for index in range(heroes_count):
+            team.add_hero(self.create_hero())
         self.team_two = team
+
+    def team_battle(self):
+        self.team_one.attack(self.team_two)
+
+    def show_stats(self):
+        print('______________________________')
+        print('            STATS             ')
+        print('______________________________\n')
+
+        alive_in_team_one = []
+        num_kills_team_one = 0
+        num_deaths_team_one = 0
+
+        alive_in_team_two = []
+        num_kills_team_two = 0
+        num_deaths_team_two = 0
+
+        for hero in self.team_one.heroes:
+            if hero.is_alive():
+                alive_in_team_one.append(hero)
+            num_kills_team_one += hero.kills
+            num_deaths_team_one += hero.deaths
+
+        for hero in self.team_two.heroes:
+            if hero.is_alive():
+                alive_in_team_two.append(hero)
+            num_kills_team_two += hero.kills
+            num_deaths_team_two += hero.deaths
+
+        if len(alive_in_team_one) > len(alive_in_team_two):
+            print(f'Winner: {self.team_one.name}')
+            print(f'with {len(alive_in_team_one)} heroes alive!\n')
+            print('Alive heroes (name, kills/deaths):')
+            for hero in alive_in_team_one:
+                print('{} - {}/{}'.format(hero.name, hero.kills, hero.deaths))
+            print(f'\n\nTeam 1 kills/deaths: {num_kills_team_one}')
+            print(f'Team 2 kills/deaths: {num_kills_team_two}')
+
+        else:
+            print(f'Winner: {self.team_two.name}')
+            print(f'with {num_alive_team_two} heroes alive!')
 
 
 class Weapon(Ability):
     def attack(self):
-        return random.randint(self.max_damage // 2, self.max_damage)
+        return random.randint(int(self.max_damage) // 2, int(self.max_damage))
 
 
 if __name__ == "__main__":
-    # If you run this file from the terminal
-    # this block is executed.
-    team1 = Team("Team One")
-    team2 = Team("Team Two")
-    hero1 = Hero("Wonder Woman")
-    hero2 = Hero("Dumbledore")
-    team1.add_hero(hero1)
-    team2.add_hero(hero2)
-    ability1 = Ability("Super Speed", 300)
-    ability2 = Ability("Super Eyes", 130)
-    ability3 = Ability("Wizard Wand", 80)
-    ability4 = Ability("Wizard Beard", 20)
-    hero1.add_ability(ability1)
-    hero1.add_ability(ability2)
-    hero2.add_ability(ability3)
-    hero2.add_ability(ability4)
-    hero1.fight(hero2)
-    my_dog = Dog("Sophie", 12)
-    my_dog.sleep()
-    my_dog.bark()
-    team1.stats()
-    team2.stats()
+    arena = Arena()
+    arena.build_team_one()
+    arena.build_team_two()
+    arena.team_battle()
+    arena.show_stats()

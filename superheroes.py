@@ -104,7 +104,7 @@ class Hero:
             attack_val = damage - attack
         else:
             attack_val = 0 # set attack back to 0 if it goes below 0
-        self.current_health = self.current_health - attack_val
+        self.current_health = int(self.current_health) - int(attack_val)
         # self.current_health -= damage - self.defend()
         # return self.current_health
 
@@ -233,7 +233,7 @@ class Arena:
 
         else:
             print(f'Winner: {self.team_two.name}')
-            print(f'with {num_alive_team_two} heroes alive!')
+            print(f'with {len(alive_in_team_two)} heroes alive!')
 
 
 class Weapon(Ability):
